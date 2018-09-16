@@ -155,16 +155,15 @@
         function handleCollision(x, y) {
             targets.forEach(target => {
                 if (x > target.offsetLeft && x < target.offsetLeft + target.clientWidth && y > target.offsetTop && y < target.offsetTop + target.clientHeight) {
-
                     console.log(target);
                     target.style.borderStyle = "dotted";
                     if (target == targets[0]) {
                         handleDragStop();
-                        plate.style.transform = 'translate(' + snapX + 'px,' + snapY + 'px) translateZ(0) scale(1)';
                         plate.style.transition = "background 1s";
                         plate.style.background = "tomato";
-                        //plate.style.left = snapX + "px";
-                        //plate.style.top = snapY + "px";
+                        plate.style.left = snapX + "px";
+                        plate.style.top = snapY + "px";
+                        // plate.style.transform = 'translate(' + snapX + 'px,' + snapY + 'px) translateZ(0) scale(1)';
                         plate.removeEventListener('touchstart', onTouchStart);
                         plate.removeEventListener('mousedown', onPlateMouseDown);
                     }
