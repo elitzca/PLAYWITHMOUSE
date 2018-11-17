@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        html,
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            margin: auto;
+        }
+
+        .item {
+            border: 1px solid silver;
+        }
+        /*****************/
+
+        .g {
+            background: #eaa094;
+        }
+
+        .r {
+            background: #d9211a;
+        }
+
+        .o {
+            background: #f7641d;
+        }
+
+        .k {
+            background: black;
+        }
+
+        ._ {
+            background: papayawhip;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+    </div>
+
+    <template class="template">
+        <div class="item"></div>
+    </template>
+    <script>
+        let art = {
+            columns: 16,
+            rows: 16,
+            classes: [
+                '_', '_', '_', '_', '_', '_', '_', 'g', '_', '_', '_', '_', '_', '_', '_', '_',
+                '_', '_', '_', '_', '_', '_', '_', 'g', '_', '_', '_', '_', '_', '_', '_', '_',
+                '_', '_', '_', '_', 'g', 'o', 'o', 'o', 'o', 'g', 'g', '_', '_', '_', '_', '_',
+                '_', '_', '_', 'g', 'g', 'g', 'o', 'o', 'o', 'o', 'o', 'r', 'g', '_', '_', '_',
+                '_', '_', 'g', 'g', 'g', 'g', 'r', 'o', 'o', 'o', 'o', 'o', 'r', 'g', '_', '_',
+                '_', '_', 'o', 'o', 'o', 'r', 'r', 'r', 'o', 'o', 'g', 'o', 'o', 'r', '_', '_',
+                '_', 'g', 'r', 'r', 'r', 'r', 'r', 'r', 'o', 'o', 'g', 'g', 'o', 'r', 'g', '_',
+                '_', 'g', 'r', 'r', 'r', 'r', 'r', 'r', 'o', 'o', 'g', 'g', 'o', 'r', 'g', '_',
+                '_', 'g', 'r', 'r', 'r', 'r', 'r', 'r', 'o', 'o', 'g', 'o', 'r', 'r', 'g', '_',
+                '_', '_', 'r', 'r', 'r', 'r', 'r', 'r', 'o', 'o', 'o', 'o', 'o', 'r', '_', '_',
+                '_', '_', 'r', 'r', 'r', 'r', 'r', 'o', 'o', 'o', 'o', 'o', 'o', 'r', '_', '_',
+                '_', '_', 'g', 'r', 'r', 'r', 'r', 'o', 'o', 'o', 'o', 'o', 'r', 'g', '_', '_',
+                '_', '_', '_', 'r', 'r', 'r', 'r', 'o', 'o', 'o', 'o', 'o', 'r', '_', '_', '_',
+                '_', '_', '_', 'r', 'r', 'r', 'r', 'o', 'o', 'o', 'o', 'r', 'g', '_', '_', '_',
+                '_', '_', '_', '_', 'r', 'r', 'r', 'r', 'o', 'r', 'o', 'g', '_', '_', '_', '_',
+                '_', '_', '_', '_', '_', 'g', 'r', 'r', 'g', '_', '_', '_', '_', '_', '_', '_'
+            ],
+            leftLid: [
+                85, 86,
+                101, 102
+            ],
+            rightLid: [
+                89, 90,
+                105, 106
+            ],
+            lidOpenClasses: [
+                "_", "_",
+                "_", "k"
+            ],
+            lidClosedClasses: [
+                "r", "r",
+                "r", "r"
+            ]
+        };
+
+        const container = document.querySelector(".container");
+
+        document.addEventListener("DOMContentLoaded", init);
+
+        function init() {
+            container.style.width = container.style.height = "100vh";
+            container.style.display = "grid";
+            container.style.gridTemplateColumns = "repeat(" + art.columns + ", 1fr)";
+            displayArt();
+        }
+
+        function displayArt() {
+            const template = document.querySelector("template");
+            art.classes.forEach(artClass => {
+                let clone = template.content.cloneNode(true);
+
+                // manips here
+                clone.querySelector(".item").classList.add(artClass);
+
+                container.appendChild(clone);
+            });
+        }
+
+    </script>
+</body>
+
+</html>

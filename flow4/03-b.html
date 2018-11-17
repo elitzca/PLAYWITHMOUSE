@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        html,
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            margin: auto;
+        }
+
+        .item {
+            border: 1px solid silver;
+        }
+        /*****************/
+
+        .g {
+            background: #eaa094;
+        }
+
+        .r {
+            background: #d9211a;
+        }
+
+        .o {
+            background: #f7641d;
+        }
+
+        .k {
+            background: black;
+        }
+
+        ._ {
+            background: papayawhip;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+    </div>
+    <button>cheat</button>
+    <template class="template">
+        <div class="item"></div>
+    </template>
+
+    <script>
+        // EDIT
+        // Changed global decalrations colorsDone = []; and allHovered = false;
+        // into local declarations in displayArt, because they are only used there
+        let art = {
+            columns: 16,
+            rows: 16,
+            classes: [
+                '_', '_', '_', '_', '_', '_', '_', 'g', '_', '_', '_', '_', '_', '_', '_', '_',
+                '_', '_', '_', '_', '_', '_', '_', 'g', '_', '_', '_', '_', '_', '_', '_', '_',
+                '_', '_', '_', '_', 'g', 'o', 'o', 'o', 'o', 'g', 'g', '_', '_', '_', '_', '_',
+                '_', '_', '_', 'g', 'g', 'g', 'o', 'o', 'o', 'o', 'o', 'r', 'g', '_', '_', '_',
+                '_', '_', 'g', 'g', 'g', 'g', 'r', 'o', 'o', 'o', 'o', 'o', 'r', 'g', '_', '_',
+                '_', '_', 'o', 'o', 'o', 'r', 'r', 'r', 'o', 'o', 'g', 'o', 'o', 'r', '_', '_',
+                '_', 'g', 'r', 'r', 'r', 'r', 'r', 'r', 'o', 'o', 'g', 'g', 'o', 'r', 'g', '_',
+                '_', 'g', 'r', 'r', 'r', 'r', 'r', 'r', 'o', 'o', 'g', 'g', 'o', 'r', 'g', '_',
+                '_', 'g', 'r', 'r', 'r', 'r', 'r', 'r', 'o', 'o', 'g', 'o', 'r', 'r', 'g', '_',
+                '_', '_', 'r', 'r', 'r', 'r', 'r', 'r', 'o', 'o', 'o', 'o', 'o', 'r', '_', '_',
+                '_', '_', 'r', 'r', 'r', 'r', 'r', 'o', 'o', 'o', 'o', 'o', 'o', 'r', '_', '_',
+                '_', '_', 'g', 'r', 'r', 'r', 'r', 'o', 'o', 'o', 'o', 'o', 'r', 'g', '_', '_',
+                '_', '_', '_', 'r', 'r', 'r', 'r', 'o', 'o', 'o', 'o', 'o', 'r', '_', '_', '_',
+                '_', '_', '_', 'r', 'r', 'r', 'r', 'o', 'o', 'o', 'o', 'r', 'g', '_', '_', '_',
+                '_', '_', '_', '_', 'r', 'r', 'r', 'r', 'o', 'r', 'o', 'g', '_', '_', '_', '_',
+                '_', '_', '_', '_', '_', 'g', 'r', 'r', 'g', '_', '_', '_', '_', '_', '_', '_'
+            ],
+            leftLid: [
+                85, 86,
+                101, 102
+            ],
+            rightLid: [
+                89, 90,
+                105, 106
+            ],
+            lidOpenClasses: [
+                "_", "_",
+                "_", "_"
+            ],
+            lidClosedClasses: [
+                "r", "r",
+                "r", "r"
+            ]
+        };
+        let pixels = [];
+        let blackEyeLeft = art.leftLid[3];
+        let blackEyeRight = art.rightLid[2];
+        let blinkInterval, blinkTimeout;
+        const container = document.querySelector(".container");
+        const but = document.querySelector("button");
+
+        document.addEventListener("DOMContentLoaded", init);
+
+        function init() {
+            container.style.width = container.style.height = "100vh";
+            container.style.display = "grid";
+            container.style.gridTemplateColumns = "repeat(" + art.columns + ", 1fr)";
+            but.addEventListener("click", cheat);
+            displayArt();
+        }
+
+        function displayArt() {
+            let colorsDone = [];
+            let allHovered = false;
+            const template = document.querySelector("template");
+            art.classes.forEach(artClass => {
+                let clone = template.content.cloneNode(true);
+                clone.querySelector(".item").addEventListener("mouseover", function over() {
+                    this.style.cursor = "pointer";
+                    if (!this.classList.contains(artClass)) {
+                        this.classList.add(artClass);
+                        colorsDone.push(artClass); // one more done
+                    }
+                    if (colorsDone.length == art.classes.length) {
+                        allHovered = true;
+                        // WHAT HAPPENS NEXT
+                        blinkClose();
+                        blinkInterval = setInterval(blinkClose, 6000);
+                        container.addEventListener("mousemove", eyes);
+                    }
+                    this.removeEventListener('mouseover', over);
+                });
+                clone.querySelector(".item").addEventListener("mouseout", function out() {
+                    this.style.cursor = "default";
+                    this.removeEventListener('mouseover', out);
+                });
+                container.appendChild(clone);
+            });
+            pixels = document.querySelectorAll(".item");
+        }
+
+
+        function color(elm, artClass) {
+            elm.classList = "item";
+            elm.classList.add(artClass);
+        }
+
+        function blinkClose() {
+            for (let i = 0; i < art.lidClosedClasses.length; i++) {
+                let stagger = i * 0.09;
+                pixels[art.leftLid[i]].style.transition = "0s " + stagger + "s";
+                pixels[art.rightLid[i]].style.transition = "0s " + stagger + "s";
+                color(pixels[art.leftLid[i]], art.lidClosedClasses[i]);
+                color(pixels[art.rightLid[i]], art.lidClosedClasses[i]);
+            }
+            blinkTimeout = setTimeout(blinkOpen, 400);
+        }
+
+        function blinkOpen() {
+            for (let i = 0; i < art.lidOpenClasses.length; i++) {
+                //console.log(pixels[art.leftLid[i]], art.lidOpenClasses[i]);
+                color(pixels[art.leftLid[i]], art.lidOpenClasses[i]);
+                color(pixels[art.rightLid[i]], art.lidOpenClasses[i]);
+                pixels[art.leftLid[i]].style.transition = "none";
+                pixels[art.rightLid[i]].style.transition = "none";
+            }
+            color(pixels[blackEyeLeft], "k");
+            color(pixels[blackEyeRight], "k");
+        }
+
+
+
+        function colorEyes() {
+            for (let i = 0; i < art.lidOpenClasses.length; i++) {
+                //console.log(pixels[art.leftLid[i]], art.lidOpenClasses[i]);
+                color(pixels[art.leftLid[i]], art.lidOpenClasses[i]);
+                color(pixels[art.rightLid[i]], art.lidOpenClasses[i]);
+            }
+            color(pixels[blackEyeLeft], "k");
+            color(pixels[blackEyeRight], "k");
+        }
+
+        function eyes(e) {
+            let leftEyeCenter = pixels[art.leftLid[3]].offsetLeft;
+            let rightEyeCenter = pixels[art.rightLid[3]].offsetLeft;
+            let bothEyesMiddle = pixels[art.leftLid[3]].offsetTop;
+
+            if (e.clientX < leftEyeCenter && e.clientY < bothEyesMiddle) {
+                blackEyeLeft = art.leftLid[0];
+                blackEyeRight = art.rightLid[0];
+            }
+            if (e.clientX > rightEyeCenter && e.clientY < bothEyesMiddle) {
+                blackEyeLeft = art.leftLid[1];
+                blackEyeRight = art.rightLid[1];
+            }
+            if (e.clientX > rightEyeCenter && e.clientY > bothEyesMiddle) {
+                blackEyeLeft = art.leftLid[3];
+                blackEyeRight = art.rightLid[3];
+            }
+            if (e.clientX < leftEyeCenter && e.clientY > bothEyesMiddle) {
+                blackEyeLeft = art.leftLid[2];
+                blackEyeRight = art.rightLid[2];
+            }
+            if (e.clientX > leftEyeCenter && e.clientX < rightEyeCenter && e.clientY < bothEyesMiddle) {
+                blackEyeLeft = art.leftLid[1];
+                blackEyeRight = art.rightLid[0];
+            }
+            if (e.clientX > leftEyeCenter && e.clientX < rightEyeCenter && e.clientY > bothEyesMiddle) {
+                blackEyeLeft = art.leftLid[3];
+                blackEyeRight = art.rightLid[2];
+            }
+            colorEyes();
+        }
+
+
+
+        function cheat() {
+            container.textContent = "";
+            const template = document.querySelector("template");
+            art.classes.forEach(artClass => {
+                let clone = template.content.cloneNode(true);
+                clone.querySelector(".item").classList.add(artClass);
+                container.appendChild(clone);
+            });
+            pixels = document.querySelectorAll(".item");
+            blinkClose();
+            blinkInterval = setInterval(blinkClose, 6000);
+            container.addEventListener("mousemove", eyes);
+        }
+
+    </script>
+</body>
+
+</html>
